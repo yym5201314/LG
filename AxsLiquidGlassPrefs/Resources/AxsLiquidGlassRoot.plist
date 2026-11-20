@@ -44,12 +44,12 @@
         <dict>
             <key>cell</key><string>PSTitleValueCell</string>
             <key>cellClass</key><string>AxsLiquidGlassSliderCell</string>
-            <key>label</key><string>高光强度</string>
+            <key>label</key><string>边缘高光</string>
             <key>key</key><string>glossLevel</string>
             <key>defaults</key><string>com.axs.liquidglass</string>
-            <key>default</key><real>0.5</real>
+            <key>default</key><real>2.0</real>
             <key>min</key><real>0.0</real>
-            <key>max</key><real>1.0</real>
+            <key>max</key><real>10.0</real>
         </dict>
         <dict>
             <key>cell</key><string>PSTitleValueCell</string>
@@ -57,17 +57,17 @@
             <key>label</key><string>圆角半径</string>
             <key>key</key><string>cornerRadius</string>
             <key>defaults</key><string>com.axs.liquidglass</string>
-            <key>default</key><real>25.0</real>
+            <key>default</key><real>20.0</real>
             <key>min</key><real>0.0</real>
             <key>max</key><real>60.0</real>
         </dict>
         <dict>
-            <key>cell</key><string>PSEditTextCell</string>
-            <key>label</key><string>着色</string>
+            <key>cell</key><string>PSTitleValueCell</string>
+            <key>cellClass</key><string>AxsLiquidGlassColorCell</string>
+            <key>label</key><string>填充颜色</string>
             <key>key</key><string>colorTint</string>
             <key>defaults</key><string>com.axs.liquidglass</string>
             <key>default</key><string>#2563eb</string>
-            <key>placeholder</key><string>#2563eb</string>
         </dict>
     </array>
 </dict>

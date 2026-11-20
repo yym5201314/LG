@@ -3,8 +3,31 @@
 #import <Preferences/PSSpecifier.h>
 #import <UIKit/UIKit.h>
 #import "AxsLiquidGlassSliderCell.h"
+#import "AxsLiquidGlassColorCell.h"
+#import "AxsLiquidGlassColor.h"
+#import <objc/runtime.h>
 
-@interface AxsLiquidGlassRootListController () <AxsLiquidGlassSliderCellHandler>
+static char AxsLiquidGlassColorDelegateKey;
+
+// The system picker holds its delegate weakly; the key ties it back to a specifier.
+@interface AxsLiquidGlassColorPickerDelegate : NSObject <UIColorPickerViewControllerDelegate>
+@property (nonatomic, strong) PSSpecifier *specifier;
+@property (nonatomic, weak) AxsLiquidGlassRootListController *controller;
+@end
+
+@implementation AxsLiquidGlassColorPickerDelegate
+
+- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController {
+    AxsLiquidGlassRootListController *controller = self.controller;
+    if (!controller || !self.specifier) return;
+    [controller setPreferenceValue:axs_liquidglass_hexFromColor(viewController.selectedColor)
+                         specifier:self.specifier];
+    [controller axs_liquidglass_refreshColorCells];
+}
+
+@end
+
+@interface AxsLiquidGlassRootListController () <AxsLiquidGlassSliderCellHandler, AxsLiquidGlassColorCellHandler>
 @end
 
 @implementation AxsLiquidGlassRootListController
@@ -91,6 +114,11 @@
         sliderCell.handler = self;
         [sliderCell axs_liquidglass_reloadState];
     }
+    if ([cell isKindOfClass:[AxsLiquidGlassColorCell class]]) {
+        AxsLiquidGlassColorCell *colorCell = (AxsLiquidGlassColorCell *)cell;
+        colorCell.handler = self;
+        [colorCell axs_liquidglass_reloadState];
+    }
 }
 
 - (double)axs_liquidglass_sliderValueForSpecifier:(PSSpecifier *)specifier {
@@ -105,6 +133,43 @@
     if (!isfinite(maximum) || maximum <= minimum) maximum = minimum + 1.0;
     if (!isfinite(value)) value = minimum;
     [self setPreferenceValue:@(fmax(minimum, fmin(maximum, value))) specifier:specifier];
+}
+
+- (UIColor *)axs_liquidglass_colorForSpecifier:(PSSpecifier *)specifier {
+    UIColor *fallback = axs_liquidglass_colorFromHexString([specifier propertyForKey:@"default"], nil);
+    if (!fallback) {
+        fallback = [UIColor colorWithRed:0.149 green:0.392 blue:0.922 alpha:1.0];
+    }
+    return axs_liquidglass_colorFromHexString([self readPreferenceValue:specifier], fallback);
+}
+
+- (void)axs_liquidglass_refreshColorCells {
+    for (UITableViewCell *cell in self.table.visibleCells) {
+        if ([cell isKindOfClass:[AxsLiquidGlassColorCell class]]) {
+            [(AxsLiquidGlassColorCell *)cell axs_liquidglass_reloadState];
+        }
+    }
+}
+
+- (void)axs_liquidglass_chooseColorForSpecifier:(PSSpecifier *)specifier {
+    [self axs_liquidglass_presentColorPickerForSpecifier:specifier];
+}
+
+- (void)axs_liquidglass_presentColorPickerForSpecifier:(PSSpecifier *)specifier {
+    if (!specifier) return;
+    if (@available(iOS 14.0, *)) {
+        UIColorPickerViewController *picker = [[UIColorPickerViewController alloc] init];
+        picker.selectedColor = [self axs_liquidglass_colorForSpecifier:specifier];
+        picker.supportsAlpha = NO;
+        picker.title = specifier.name ?: @"选择颜色";
+        AxsLiquidGlassColorPickerDelegate *delegate = [[AxsLiquidGlassColorPickerDelegate alloc] init];
+        delegate.specifier = specifier;
+        delegate.controller = self;
+        objc_setAssociatedObject(picker, &AxsLiquidGlassColorDelegateKey, delegate,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        picker.delegate = delegate;
+        [self presentViewController:picker animated:YES completion:nil];
+    }
 }
 
 @end

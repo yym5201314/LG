@@ -71,8 +71,8 @@ static const void *AxsLiquidGlassGlassViewKey = &AxsLiquidGlassGlassViewKey;
 
     double opacity = [[config axs_liquidglass_valueForKey:@"glassOpacity" defaultValue:@0.85] doubleValue];
     double blur = [[config axs_liquidglass_valueForKey:@"glassBlur" defaultValue:@15.0] doubleValue];
-    double gloss = [[config axs_liquidglass_valueForKey:@"glossLevel" defaultValue:@0.5] doubleValue];
-    double radius = [[config axs_liquidglass_valueForKey:@"cornerRadius" defaultValue:@25.0] doubleValue];
+    double gloss = [[config axs_liquidglass_valueForKey:@"glossLevel" defaultValue:@5.0] doubleValue];
+    double radius = [[config axs_liquidglass_valueForKey:@"cornerRadius" defaultValue:@20.0] doubleValue];
     NSString *hex = [config axs_liquidglass_valueForKey:@"colorTint" defaultValue:@"#2563eb"];
     UIColor *tint = axs_liquidglass_colorFromHexString(hex,
         [UIColor colorWithRed:0.149 green:0.392 blue:0.922 alpha:1.0]);

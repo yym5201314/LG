@@ -57,7 +57,8 @@
     [self axs_liquidglass_setupSubviewsIfNeeded];
 
     opacity = fmax(0.0, fmin(1.0, opacity));
-    glossLevel = fmax(0.0, fmin(1.0, glossLevel));
+    // Panel exposes 0-10; normalize before deriving the highlight alpha.
+    glossLevel = fmax(0.0, fmin(10.0, glossLevel)) / 10.0;
     blurAmount = fmax(0.0, fmin(50.0, blurAmount));
     tintColor = tintColor ?: [UIColor colorWithRed:0.149 green:0.392 blue:0.922 alpha:1.0];
 

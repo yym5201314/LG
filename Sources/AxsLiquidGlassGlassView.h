@@ -1,6 +1,7 @@
 #pragma once
 
 #import <UIKit/UIKit.h>
+#import "AxsLiquidGlassColor.h"
 
 @interface AxsLiquidGlassGlassView : UIView
 - (void)axs_liquidglass_applyOpacity:(CGFloat)opacity
@@ -9,27 +10,3 @@
                         glossLevel:(CGFloat)glossLevel
                         blurAmount:(CGFloat)blurAmount;
 @end
-
-// "#2563eb" -> UIColor. Parsing failure returns the fallback instead of black.
-static inline UIColor *axs_liquidglass_colorFromHexString(NSString *hex, UIColor *fallback) {
-    if (![hex isKindOfClass:[NSString class]]) {
-        return fallback;
-    }
-    NSString *text = [hex stringByTrimmingCharactersInSet:
-        [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if ([text hasPrefix:@"#"]) {
-        text = [text substringFromIndex:1];
-    }
-    if (text.length != 6) {
-        return fallback;
-    }
-    unsigned int rgb = 0;
-    NSScanner *scanner = [NSScanner scannerWithString:text];
-    if (![scanner scanHexInt:&rgb]) {
-        return fallback;
-    }
-    return [UIColor colorWithRed:((rgb >> 16) & 0xFF) / 255.0
-                           green:((rgb >> 8) & 0xFF) / 255.0
-                            blue:(rgb & 0xFF) / 255.0
-                           alpha:1.0];
-}

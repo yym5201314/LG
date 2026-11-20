@@ -40,9 +40,9 @@ LiquidGlass/
 | `enabled` | 启用插件 | 关闭 |
 | `glassOpacity` | 玻璃着色透明度 | 0.85 |
 | `glassBlur` | 模糊强度（0–50，映射到材质透明度） | 15 |
-| `glossLevel` | 高光强度 | 0.5 |
-| `cornerRadius` | 圆角半径 | 25 |
-| `colorTint` | 着色（`#RRGGBB`，解析失败用 `#2563eb`） | `#2563eb` |
+| `glossLevel` | 高光强度（0–10） | 5 |
+| `cornerRadius` | 圆角半径 | 20 |
+| `colorTint` | 着色（颜色选择器写入 `#RRGGBBAA`，也兼容 `#RRGGBB`） | `#2563eb` |
 
 面板是配置文件的唯一写入方：写入 `/var/mobile/Library/Preferences/com.axs.liquidglass.plist`
 （roothide 下为隐根路径），并镜像到 `NSUserDefaults` 后广播
