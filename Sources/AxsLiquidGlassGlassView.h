@@ -3,7 +3,6 @@
 #import <UIKit/UIKit.h>
 
 @interface AxsLiquidGlassGlassView : UIView
-- (instancetype)axs_liquidglass_initWithFrame:(CGRect)frame;
 - (void)axs_liquidglass_applyOpacity:(CGFloat)opacity
                          tintColor:(UIColor *)tintColor
                       cornerRadius:(CGFloat)cornerRadius

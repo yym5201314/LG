@@ -9,31 +9,34 @@
 
 @implementation AxsLiquidGlassGlassView
 
-- (instancetype)axs_liquidglass_initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Decoration only: never swallow touches meant for Control Center.
-        self.userInteractionEnabled = NO;
-        self.backgroundColor = [UIColor clearColor];
-        self.layer.masksToBounds = YES;
-        self.layer.cornerCurve = kCACornerCurveContinuous;
-        self.layer.borderWidth = 0.5;
-
-        _blurView = [[UIVisualEffectView alloc] initWithEffect:
-            [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterial]];
-        _blurView.userInteractionEnabled = NO;
-        [self addSubview:_blurView];
-
-        _tintView = [[UIView alloc] initWithFrame:CGRectZero];
-        _tintView.userInteractionEnabled = NO;
-        [self addSubview:_tintView];
-
-        _glossLayer = [CAGradientLayer layer];
-        _glossLayer.startPoint = CGPointMake(0.0, 0.0);
-        _glossLayer.endPoint = CGPointMake(1.0, 1.0);
-        [self.layer addSublayer:_glossLayer];
+// Built on first configuration instead of an init override: ARC only allows
+// assigning self inside the init family, and a prefixed init is not that family.
+- (void)axs_liquidglass_setupSubviewsIfNeeded {
+    if (self.blurView) {
+        return;
     }
-    return self;
+    // Decoration only: never swallow touches meant for Control Center.
+    self.userInteractionEnabled = NO;
+    self.backgroundColor = [UIColor clearColor];
+    self.layer.masksToBounds = YES;
+    self.layer.cornerCurve = kCACornerCurveContinuous;
+    self.layer.borderWidth = 0.5;
+
+    _blurView = [[UIVisualEffectView alloc] initWithEffect:
+        [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterial]];
+    _blurView.userInteractionEnabled = NO;
+    [self addSubview:_blurView];
+
+    _tintView = [[UIView alloc] initWithFrame:CGRectZero];
+    _tintView.userInteractionEnabled = NO;
+    [self addSubview:_tintView];
+
+    _glossLayer = [CAGradientLayer layer];
+    _glossLayer.startPoint = CGPointMake(0.0, 0.0);
+    _glossLayer.endPoint = CGPointMake(1.0, 1.0);
+    [self.layer addSublayer:_glossLayer];
+
+    [self setNeedsLayout];
 }
 
 - (void)layoutSubviews {
@@ -51,6 +54,8 @@
                       cornerRadius:(CGFloat)cornerRadius
                         glossLevel:(CGFloat)glossLevel
                         blurAmount:(CGFloat)blurAmount {
+    [self axs_liquidglass_setupSubviewsIfNeeded];
+
     opacity = fmax(0.0, fmin(1.0, opacity));
     glossLevel = fmax(0.0, fmin(1.0, glossLevel));
     blurAmount = fmax(0.0, fmin(50.0, blurAmount));

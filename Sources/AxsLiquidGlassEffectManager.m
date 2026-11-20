@@ -60,7 +60,7 @@ static const void *AxsLiquidGlassGlassViewKey = &AxsLiquidGlassGlassViewKey;
     }
 
     if (!glass) {
-        glass = [[AxsLiquidGlassGlassView alloc] axs_liquidglass_initWithFrame:view.bounds];
+        glass = [[AxsLiquidGlassGlassView alloc] initWithFrame:view.bounds];
         objc_setAssociatedObject(view, AxsLiquidGlassGlassViewKey, glass,
                                  OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         glass.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
