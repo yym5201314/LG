@@ -1,82 +1,15 @@
 {
-  "_id": "liquidglas-control-center-tweak",
+  "schema": 1,
   "name": "LiquidGlas",
-  "shortName": "LiquidGlas",
-  "author": "LQTG",
-  "version": "1.0.0",
-  "builds": "latest",
-  "type": "tweak",
-  "description": "Beautiful liquid glass effect for iOS Control Center with customizable appearance settings.",
-  "tags": ["controlcenter", "glass", "liquid", "aesthetic", "visual"],
-  "category": "visual-effects",
-  "rootless": true,
-  "requiresJailbreak": true,
-  "dependencies": [],
-  "screenshots": [
-    "/Library/Application Support/LiquidGlas/icon.png"
-  ],
-  "platforms": ["ios"],
-  "minVersion": "14.0",
-  "maxVersion": "latest",
-  "license": "GPL-3.0",
-  "homepage": "https://github.com/lqtg/LiquidGlas",
-  "settings": [
-    {
-      "key": "enableLiquidGlass",
-      "type": "boolean",
-      "title": "Enable Liquid Glass Effect",
-      "description": "Turn on the liquid glass effect for Control Center"
-    },
-    {
-      "key": "glassOpacity",
-      "type": "float",
-      "title": "Glass Opacity",
-      "description": "Adjust the opacity of the glass layer",
-      "min": 0,
-      "max": 100,
-      "default": 85
-    },
-    {
-      "key": "glassBlur",
-      "type": "float",
-      "title": "Glass Blur Amount",
-      "description": "Blur intensity of the background",
-      "min": 0,
-      "max": 50,
-      "default": 15.0
-    },
-    {
-      "key": "glossLevel",
-      "type": "float",
-      "title": "Gloss Reflection",
-      "description": "Reflection intensity on the glass surface",
-      "min": 0,
-      "max": 100,
-      "default": 50
-    },
-    {
-      "key": "cornerRadius",
-      "type": "float",
-      "title": "Corner Radius",
-      "description": "Roundness of the control center panel",
-      "min": 0,
-      "max": 100,
-      "default": 25.0
-    },
-    {
-      "key": "colorTint",
-      "type": "string",
-      "title": "Color Tint",
-      "description": "Custom color tint for the glass effect (hex)",
-      "default": "#2563eb"
-    }
-  ],
-  "compatibility": {
-    "minimumIOS": "14.0",
-    "maximumIOS": "latest",
-    "supportedDevices": ["all"]
-  },
-  "installationType": "rootless",
-  "installTargetProcesses": ["ControlCenterSpringBoard"],
-  "packageIdentifier": "com.lqtg.LiquidGlass"
+  "id": "liquidglas",
+  "display_name": "LiquidGlas",
+  "class_prefix": "AxsLiquidGlas",
+  "symbol_prefix": "axs_liquidglas",
+  "package": "com.axs.liquidglas",
+  "bundle": "com.apple.springboard",
+  "sdk_version": "16.5",
+  "minimum_ios": "14.0",
+  "preferences": true,
+  "slider": true,
+  "github_actions": true
 }

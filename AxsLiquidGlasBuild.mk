@@ -1,14 +1,10 @@
-# Build configuration for LiquidGlas tweak
+DEBUG ?= 0
+FINALPACKAGE ?= 1
+ARCHS = arm64 arm64e
 
-export TARGET := iphone:clang:latest:14.0
-export ARCHS := arm64
-export DEBUG := 0
-export DEVELOPER_MODE := yes
-
-THEOS_PACKAGE_SCHEME = rootless
-THEOS_INSTALL_PATH = /Library/Application Support/LiquidGlas
-
-# Dynamic libraries installation paths
-INSTALL_TARGET_PROCESSES = ControlCenterSpringBoard
-
-include $(THEOS)/makefiles/common.mk
+# Rootless and Roothide require iOS 15 or newer.
+ifneq ($(filter rootless roothide,$(THEOS_PACKAGE_SCHEME)),)
+TARGET = iphone:clang:16.5:15.0
+else
+TARGET = iphone:clang:16.5:14.0
+endif

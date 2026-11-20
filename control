@@ -1,0 +1,11 @@
+Package: com.axs.liquidglas
+Name: LiquidGlas
+Version: 5.2.0
+Architecture: iphoneos-arm
+Description: Control Center liquid glass effect
+Maintainer: Axs
+Author: Axs
+Section: Axs-Tweaks
+Depends: mobilesubstrate, preferenceloader
+Icon: https://axs66.github.io/pro/icon/liquidglas.png
+Sileodepiction: https://axs66.github.io/pro/sileodepiction/liquidglas/js.json

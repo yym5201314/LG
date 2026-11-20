@@ -1,65 +1,67 @@
-# LiquidGlas - iOS Control Center Liquid Glass Effect
+# LiquidGlas
 
-## ✨ Features
+iOS 控制中心液态玻璃风格插件（Theos tweak）。
 
-- 🌊 **Liquid Glass Effect** - Stunning glassmorphism on Control Center panel
-- ⚙️ **Customizable Settings** - Adjust opacity, blur, gloss level, corner radius
-- 🎨 **Color Tint Support** - Customize the glass color appearance
-- 💎 **Smooth Animations** - Fluid transition effects
+- 包名 / 偏好域：`com.axs.liquidglas`
+- 工程与类前缀：`AxsLiquidGlas`
+- C 函数与新增 selector 前缀：`axs_liquidglas_`
+- 注入目标：`com.apple.springboard`（Control Center 运行在 SpringBoard 进程内）
+- 最低系统：iOS 14.0（rootless / roothide 需 iOS 15.0 以上）
 
-## 📥 Installation
+## 工程结构
 
-### Method 1: Cydia Saurik Repository
+```text
+LiquidGlas/
+|-- .github/workflows/build.yml           GitHub Actions 构建与 Release
+|-- control                               Debian 包信息
+|-- Makefile                              主工程
+|-- AxsLiquidGlasBuild.mk                 主工程与面板共享的 SDK / 架构配置
+|-- AxsLiquidGlas.plist                   MobileSubstrate 注入过滤器
+|-- build.sh                              rootful / rootless / roothide 打包
+|-- tweak.json                            生成器身份记录
+|-- Hooks/
+|   `-- AxsLiquidGlasMain.xm              Control Center 模块容器 hook
+|-- Headers/
+|   `-- AxsLiquidGlasPrivate.h            Control Center 私有类声明
+|-- Sources/
+|   |-- AxsLiquidGlasConfig.h/.m          配置快照（读文件，失败回落偏好域）
+|   |-- AxsLiquidGlasPreferences.h        唯一读写实现（面板写，Tweak 读）
+|   |-- AxsLiquidGlasPaths.h              配置路径（rootless / roothide 适配）
+|   |-- AxsLiquidGlasEffectManager.h/.m   玻璃层挂载与刷新
+|   `-- AxsLiquidGlasGlassView.h/.m       玻璃视图（模糊材质 + 着色 + 高光）
+|-- AxsLiquidGlasPrefs/                   设置面板（PreferenceBundle）
+`-- layout/Library/PreferenceLoader/      设置入口
+```
 
-apt-get install liquidglas
+## 配置
 
-### Method 2: Direct Installation
+| 键 | 含义 | 默认值 |
+|---|---|---|
+| `enabled` | 启用插件 | 关闭 |
+| `glassOpacity` | 玻璃着色透明度 | 0.85 |
+| `glassBlur` | 模糊强度（0–50，映射到材质透明度） | 15 |
+| `glossLevel` | 高光强度 | 0.5 |
+| `cornerRadius` | 圆角半径 | 25 |
+| `colorTint` | 着色（`#RRGGBB`，解析失败用 `#2563eb`） | `#2563eb` |
 
-1. Download .deb package from GitHub Releases
-2. Install using Cydia Impactor or Sileo
-3. Reboot your device after installation
+面板是配置文件的唯一写入方：写入 `/var/mobile/Library/Preferences/com.axs.liquidglas.plist`
+（roothide 下为隐根路径），并镜像到 `NSUserDefaults` 后广播
+`com.axs.liquidglas.preferences-changed`。Tweak 只读快照，不写默认值。
 
-## ⚙️ Configuration Settings
+## 构建
 
-| Setting | Description | Default Range |
-|---------|-------------|---------------|
-| Enable Liquid Glass | Turn on/off the glass effect | ON / OFF |
-| Glass Opacity | Control transparency level | 0 - 100% |
-| Glass Blur | Background blur intensity | 0 - 50px |
-| Gloss Level | Reflection/glossy finish | 0 - 100% |
-| Corner Radius | Rounded corner size | 0 - 100px |
-| Color Tint | Custom glass color | #2563eb (Blue) |
+```sh
+export THEOS=/path/to/theos
+sh build.sh            # rootless
+sh build.sh all        # rootful + rootless + roothide
+```
 
-## 🔄 Troubleshooting
+推送 `main` / `master` 或手动触发工作流时，CI 用 `5.2.0-<run_number>` 作为包版本构建并发布 Release。
 
-### Effect not appearing?
+## 已知边界
 
-1. Ensure Control Center is enabled in Settings
-2. Reboot your device after installation
-3. Check if the tweak loaded correctly via Cydia → Packages
-
-### Visual glitches?
-
-1. Update to the latest version
-2. Clear Cache: rm -rf /var/cache/com.lqtg.LiquidGlass
-3. Uninstall and reinstall the tweak
-
-## 📦 Build from Source
-
-make package
-find release-debs -name "*.deb"
-
-## 🔧 Technical Details
-
-- Architecture: arm64 (iOS 14+)
-- Framework Dependencies: UIKit, QuartzCore, Substrate
-- Process Injection: ControlCenterSpringBoard
-- Dynamic Libraries: LiquidGlass27.dylib, BGRenderServer.dylib, BGWidgetRenderer.dylib
-
-## ⚠️ License
-
-This project is licensed under the GPL-3.0 License - see LICENSE file for details.
-
----
-
-Made with ❤️ by LQTG
+- hook 目标是 `CCUIContentModuleContainerViewController`（ControlCenterUIKit）。启动时用
+  `objc_getClass` 探测，类不存在则跳过 hook。若目标系统类名不同，只需改
+  `Headers/AxsLiquidGlasPrivate.h` 与 `Hooks/AxsLiquidGlasMain.xm`。
+- 玻璃层 `userInteractionEnabled = NO`，不接管控制中心触摸。
+- `UIBlurEffect` 没有公开的半径 API，`glassBlur` 通过材质透明度近似强度。

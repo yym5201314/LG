@@ -1,12 +1,7 @@
-name: Build LiquidGlass
+name: Build LiquidGlas
 
 on:
   workflow_dispatch:
-    inputs:
-      watermark:
-        description: '购买者水印（wxid / QQ 号，用于泄露追踪；只允许字母数字_-，留空则不打水印）'
-        required: false
-        default: 'UNMARKED'
   push:
     branches:
       - main
@@ -85,40 +80,23 @@ jobs:
           echo "$(brew --prefix)/bin" >> "$GITHUB_PATH"
 
       - name: Build Package
-        env:
-          # 输入值只通过环境变量进入 shell，不直接拼进命令，避免被注入
-          INPUT_WATERMARK: ${{ github.event.inputs.watermark }}
         run: |
-          WATERMARK="${INPUT_WATERMARK:-UNMARKED}"
-          if ! printf '%s' "$WATERMARK" | grep -Eq '^[A-Za-z0-9_-]{1,64}$'; then
-            echo "::error::水印只能包含字母、数字、下划线、连字符（1-64 位）"
-            exit 1
-          fi
-          echo ">>> 水印：$WATERMARK"
-          # AxsLiquidGlassBuild.mk 读取同名环境变量 AXS_WATERMARK
-          export AXS_WATERMARK="$WATERMARK"
           sh build.sh "${{ matrix.build_variant }}"
-
-          # 校验水印确实编进了 dylib，没命中就失败，避免把没水印的包发给买家
-          HIT=0
-          for f in $(find .theos/obj -name 'AxsLiquidGlass.dylib' 2>/dev/null); do
-            if grep -a -q "AXLGWM_${WATERMARK}" "$f"; then
-              echo ">>> 水印命中：$f"; HIT=1
-            fi
-          done
-          [ "$HIT" = 1 ] || { echo "::error::dylib 中未找到水印 AXLGWM_${WATERMARK}"; exit 1; }
           echo "=== .deb files ==="
           find ./packages -name "*.deb" -type f
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ matrix.build_variant }}
+          path: ./packages/*.deb
+          if-no-files-found: error
 
-
-      # 只有 push 的开发包（水印 UNMARKED）发 Release。
-      # 手动触发的带水印包只放 Artifacts：Release 对公开仓库任何人可下载，会暴露哪些 wxid 是付费用户。
       - name: Create Release
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        if: (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')) || github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ github.token }}
           tag_name: v${{ steps.bump.outputs.package_version }}
-          name: "LiquidGlass v${{ steps.bump.outputs.package_version }}"
+          name: "LiquidGlas v${{ steps.bump.outputs.package_version }}"
           files: ./packages/*.deb

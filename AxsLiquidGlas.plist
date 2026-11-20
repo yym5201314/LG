@@ -5,17 +5,7 @@
     <key>Filter</key>
     <dict>
         <key>Bundles</key>
-        <array>
-            <string>com.apple.springboard</string>
-        </array>
+        <array><string>com.apple.springboard</string></array>
     </dict>
-    <key>Enabled</key>
-    <true/>
-    <key>Name</key>
-    <string>LiquidGlas</string>
-    <key>Require</key>
-    <true/>
-    <key>Version</key>
-    <integer>1.0.0</integer>
 </dict>
 </plist>

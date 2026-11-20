@@ -1,16 +1,19 @@
-# LiquidGlas - iOS Control Center Liquid Glass Tweak
-# A beautiful liquid glass effect for the iOS Control Center
+DEBUG = 0
+FINALPACKAGE = 1
 
-TARGET := iphone:clang:latest:14.0
-ARCHS = arm64
-MODULES = substrate
+ARCHS = arm64 arm64e
 
+# Share the SDK and deployment targets with the PreferenceBundle.
+include AxsLiquidGlasBuild.mk
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = LiquidGlas
-
-LiquidGlas_FILES = LiquidGlas.m BGRenderServer.m BGWidgetRenderer.m
-LiquidGlas_CFLAGS = -fobjc-arc -fmodules
-LiquidGlas_FRAMEWORKS = UIKit QuartzCore
+TWEAK_NAME = AxsLiquidGlas
+AxsLiquidGlas_FILES = $(wildcard Hooks/*.xm Sources/*.m)
+AxsLiquidGlas_CFLAGS = -fobjc-arc -I./Headers -I./Sources
+AxsLiquidGlas_FRAMEWORKS = UIKit Foundation CoreFoundation QuartzCore
+AxsLiquidGlas_LIBRARIES = substrate
 
 include $(THEOS_MAKE_PATH)/tweak.mk
+
+SUBPROJECTS += AxsLiquidGlasPrefs
+include $(THEOS_MAKE_PATH)/aggregate.mk
