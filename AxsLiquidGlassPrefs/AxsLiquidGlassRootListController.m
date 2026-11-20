@@ -155,8 +155,22 @@ static char AxsLiquidGlassColorDelegateKey;
     [self axs_liquidglass_presentColorPickerForSpecifier:specifier];
 }
 
+// Fallback for rows that lose their tap handling; the key check keeps it scoped.
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    PSSpecifier *specifier = nil;
+    if (indexPath.row < (NSInteger)self.specifiers.count) {
+        specifier = self.specifiers[indexPath.row];
+    }
+    if ([[specifier propertyForKey:@"key"] isEqualToString:@"colorTint"]) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self axs_liquidglass_presentColorPickerForSpecifier:specifier];
+        return;
+    }
+    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+}
+
 - (void)axs_liquidglass_presentColorPickerForSpecifier:(PSSpecifier *)specifier {
-    if (!specifier) return;
+    if (!specifier || self.presentedViewController) return;
     if (@available(iOS 14.0, *)) {
         UIColorPickerViewController *picker = [[UIColorPickerViewController alloc] init];
         picker.selectedColor = [self axs_liquidglass_colorForSpecifier:specifier];
