@@ -4,6 +4,7 @@
 @interface AxsLiquidGlassGlassView ()
 @property (nonatomic, strong) UIVisualEffectView *blurView;
 @property (nonatomic, strong) UIView *tintView;
+@property (nonatomic, strong) UIView *brightnessView;
 @property (nonatomic, strong) CAGradientLayer *glossLayer;
 @end
 
@@ -31,6 +32,13 @@
     _tintView.userInteractionEnabled = NO;
     [self addSubview:_tintView];
 
+    // White surface lift, independent of the tint color: a white tint alone is
+    // still darkened by the Control Center material underneath.
+    _brightnessView = [[UIView alloc] initWithFrame:CGRectZero];
+    _brightnessView.userInteractionEnabled = NO;
+    _brightnessView.backgroundColor = [UIColor clearColor];
+    [self addSubview:_brightnessView];
+
     _glossLayer = [CAGradientLayer layer];
     _glossLayer.startPoint = CGPointMake(0.0, 0.0);
     _glossLayer.endPoint = CGPointMake(1.0, 1.0);
@@ -43,6 +51,7 @@
     [super layoutSubviews];
     self.blurView.frame = self.bounds;
     self.tintView.frame = self.bounds;
+    self.brightnessView.frame = self.bounds;
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     self.glossLayer.frame = self.bounds;
@@ -53,19 +62,22 @@
                          tintColor:(UIColor *)tintColor
                       cornerRadius:(CGFloat)cornerRadius
                         glossLevel:(CGFloat)glossLevel
-                        blurAmount:(CGFloat)blurAmount {
+                        blurAmount:(CGFloat)blurAmount
+                 surfaceBrightness:(CGFloat)surfaceBrightness {
     [self axs_liquidglass_setupSubviewsIfNeeded];
 
     opacity = fmax(0.0, fmin(1.0, opacity));
     // Panel exposes 0-10; normalize before deriving the highlight alpha.
     glossLevel = fmax(0.0, fmin(10.0, glossLevel)) / 10.0;
     blurAmount = fmax(0.0, fmin(50.0, blurAmount));
+    surfaceBrightness = fmax(0.0, fmin(10.0, surfaceBrightness)) / 10.0;
     tintColor = tintColor ?: [UIColor colorWithRed:0.149 green:0.392 blue:0.922 alpha:1.0];
 
     self.layer.cornerRadius = fmax(0.0, cornerRadius);
     // UIBlurEffect has no public radius API; the material's alpha tracks the requested strength.
     self.blurView.alpha = blurAmount / 50.0;
     self.tintView.backgroundColor = [tintColor colorWithAlphaComponent:opacity * 0.45];
+    self.brightnessView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:surfaceBrightness * 0.9];
     self.layer.borderColor = [tintColor colorWithAlphaComponent:0.35 + glossLevel * 0.4].CGColor;
 
     self.glossLayer.colors = @[

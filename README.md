@@ -41,6 +41,7 @@ LiquidGlass/
 | `glassOpacity` | 玻璃着色透明度 | 0.85 |
 | `glassBlur` | 模糊强度（0–50，映射到材质透明度） | 15 |
 | `glossLevel` | 高光强度（0–10） | 5 |
+| `surfaceBrightness` | 表面提亮（0–10，白色叠加层，与着色无关） | 0 |
 | `cornerRadius` | 圆角半径 | 20 |
 | `colorTint` | 着色（颜色选择器写入 `#RRGGBBAA`，也兼容 `#RRGGBB`） | `#2563eb` |
 

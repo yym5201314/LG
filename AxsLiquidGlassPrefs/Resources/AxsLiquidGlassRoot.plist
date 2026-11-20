@@ -54,6 +54,16 @@
         <dict>
             <key>cell</key><string>PSTitleValueCell</string>
             <key>cellClass</key><string>AxsLiquidGlassSliderCell</string>
+            <key>label</key><string>表面提亮</string>
+            <key>key</key><string>surfaceBrightness</string>
+            <key>defaults</key><string>com.axs.liquidglass</string>
+            <key>default</key><real>0.0</real>
+            <key>min</key><real>0.0</real>
+            <key>max</key><real>10.0</real>
+        </dict>
+        <dict>
+            <key>cell</key><string>PSTitleValueCell</string>
+            <key>cellClass</key><string>AxsLiquidGlassSliderCell</string>
             <key>label</key><string>圆角半径</string>
             <key>key</key><string>cornerRadius</string>
             <key>defaults</key><string>com.axs.liquidglass</string>

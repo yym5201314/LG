@@ -8,5 +8,6 @@
                          tintColor:(UIColor *)tintColor
                       cornerRadius:(CGFloat)cornerRadius
                         glossLevel:(CGFloat)glossLevel
-                        blurAmount:(CGFloat)blurAmount;
+                        blurAmount:(CGFloat)blurAmount
+                 surfaceBrightness:(CGFloat)surfaceBrightness;
 @end

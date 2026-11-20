@@ -73,6 +73,7 @@ static const void *AxsLiquidGlassGlassViewKey = &AxsLiquidGlassGlassViewKey;
     double blur = [[config axs_liquidglass_valueForKey:@"glassBlur" defaultValue:@15.0] doubleValue];
     double gloss = [[config axs_liquidglass_valueForKey:@"glossLevel" defaultValue:@5.0] doubleValue];
     double radius = [[config axs_liquidglass_valueForKey:@"cornerRadius" defaultValue:@20.0] doubleValue];
+    double brightness = [[config axs_liquidglass_valueForKey:@"surfaceBrightness" defaultValue:@0.0] doubleValue];
     NSString *hex = [config axs_liquidglass_valueForKey:@"colorTint" defaultValue:@"#2563eb"];
     UIColor *tint = axs_liquidglass_colorFromHexString(hex,
         [UIColor colorWithRed:0.149 green:0.392 blue:0.922 alpha:1.0]);
@@ -81,7 +82,8 @@ static const void *AxsLiquidGlassGlassViewKey = &AxsLiquidGlassGlassViewKey;
                              tintColor:tint
                           cornerRadius:radius
                             glossLevel:gloss
-                            blurAmount:blur];
+                            blurAmount:blur
+                     surfaceBrightness:brightness];
 }
 
 @end
