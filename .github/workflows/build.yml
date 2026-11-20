@@ -1,4 +1,4 @@
-name: Build LiquidGlas
+name: Build LiquidGlass
 
 on:
   workflow_dispatch:
@@ -98,5 +98,5 @@ jobs:
         with:
           token: ${{ github.token }}
           tag_name: v${{ steps.bump.outputs.package_version }}
-          name: "LiquidGlas v${{ steps.bump.outputs.package_version }}"
+          name: "LiquidGlass v${{ steps.bump.outputs.package_version }}"
           files: ./packages/*.deb

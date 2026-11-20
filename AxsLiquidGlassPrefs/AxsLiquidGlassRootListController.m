@@ -1,29 +1,29 @@
-#import "AxsLiquidGlasRootListController.h"
-#import "AxsLiquidGlasPreferences.h"
+#import "AxsLiquidGlassRootListController.h"
+#import "AxsLiquidGlassPreferences.h"
 #import <Preferences/PSSpecifier.h>
 #import <UIKit/UIKit.h>
-#import "AxsLiquidGlasSliderCell.h"
+#import "AxsLiquidGlassSliderCell.h"
 
-@interface AxsLiquidGlasRootListController () <AxsLiquidGlasSliderCellHandler>
+@interface AxsLiquidGlassRootListController () <AxsLiquidGlassSliderCellHandler>
 @end
 
-@implementation AxsLiquidGlasRootListController
+@implementation AxsLiquidGlassRootListController
 
 - (NSMutableArray *)specifiers {
     if (!_specifiers) {
-        NSMutableArray *items = [[self loadSpecifiersFromPlistName:@"AxsLiquidGlasRoot"
+        NSMutableArray *items = [[self loadSpecifiersFromPlistName:@"AxsLiquidGlassRoot"
                                                            target:self] mutableCopy];
         [items addObject:[PSSpecifier preferenceSpecifierNamed:@"关于我们" target:self
                      set:nil get:nil detail:nil cell:PSGroupCell edit:nil]];
-        [self axs_liquidglas_addButton:@"Sileo 越狱源" action:@selector(axs_liquidglas_openRepository:) to:items];
-        [self axs_liquidglas_addButton:@"TG分享频道" action:@selector(axs_liquidglas_openTelegram:) to:items];
-        [self axs_liquidglas_addButton:@"QQ交流群组" action:@selector(axs_liquidglas_openQQ:) to:items];
+        [self axs_liquidglass_addButton:@"Sileo 越狱源" action:@selector(axs_liquidglass_openRepository:) to:items];
+        [self axs_liquidglass_addButton:@"TG分享频道" action:@selector(axs_liquidglass_openTelegram:) to:items];
+        [self axs_liquidglass_addButton:@"QQ交流群组" action:@selector(axs_liquidglass_openQQ:) to:items];
         _specifiers = items;
     }
     return _specifiers;
 }
 
-- (void)axs_liquidglas_addButton:(NSString *)title action:(SEL)action to:(NSMutableArray *)items {
+- (void)axs_liquidglass_addButton:(NSString *)title action:(SEL)action to:(NSMutableArray *)items {
     PSSpecifier *item = [PSSpecifier preferenceSpecifierNamed:title target:self
                           set:nil get:nil detail:nil cell:PSButtonCell edit:nil];
     item.buttonAction = action;
@@ -33,14 +33,14 @@
 - (id)readPreferenceValue:(PSSpecifier *)specifier {
     NSString *key = [specifier propertyForKey:@"key"];
     if (key.length == 0) return nil;
-    return axs_liquidglas_readPreferences()[key] ?: [specifier propertyForKey:@"default"];
+    return axs_liquidglass_readPreferences()[key] ?: [specifier propertyForKey:@"default"];
 }
 
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
     NSString *key = [specifier propertyForKey:@"key"];
     if (key.length == 0) return;
     NSError *error = nil;
-    if (!axs_liquidglas_writePreference(key, value, &error)) {
+    if (!axs_liquidglass_writePreference(key, value, &error)) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"设置未保存"
             message:error.localizedDescription ?: @"请检查配置文件路径和写入权限。"
             preferredStyle:UIAlertControllerStyleAlert];
@@ -50,12 +50,12 @@
     }
 }
 
-- (void)axs_liquidglas_openURL:(NSURL *)url fallback:(NSURL *)fallback {
+- (void)axs_liquidglass_openURL:(NSURL *)url fallback:(NSURL *)fallback {
     if (!url) return;
     [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
         if (success) return;
         if (fallback) {
-            [self axs_liquidglas_openURL:fallback fallback:nil];
+            [self axs_liquidglass_openURL:fallback fallback:nil];
         } else {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"无法打开链接"
                 message:@"请确认已安装对应应用。" preferredStyle:UIAlertControllerStyleAlert];
@@ -65,20 +65,20 @@
     }];
 }
 
-- (void)axs_liquidglas_openRepository:(id)sender {
+- (void)axs_liquidglass_openRepository:(id)sender {
     NSString *source = @"https://axs66.github.io/pro";
     NSString *encoded = [source stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
     NSURL *primary = [NSURL URLWithString:[@"sileo://source/" stringByAppendingString:encoded ?: source]];
-    [self axs_liquidglas_openURL:primary fallback:[NSURL URLWithString:source]];
+    [self axs_liquidglass_openURL:primary fallback:[NSURL URLWithString:source]];
 }
 
-- (void)axs_liquidglas_openTelegram:(id)sender {
-    [self axs_liquidglas_openURL:[NSURL URLWithString:@"tg://resolve?domain=wxfx8"]
+- (void)axs_liquidglass_openTelegram:(id)sender {
+    [self axs_liquidglass_openURL:[NSURL URLWithString:@"tg://resolve?domain=wxfx8"]
                    fallback:[NSURL URLWithString:@"https://t.me/wxfx8"]];
 }
 
-- (void)axs_liquidglas_openQQ:(id)sender {
-    [self axs_liquidglas_openURL:[NSURL URLWithString:@"mqqapi://card/show_pslcard?src_type=internal&version=1&uin=678055716&card_type=group&source=qrcode"] fallback:nil];
+- (void)axs_liquidglass_openQQ:(id)sender {
+    [self axs_liquidglass_openURL:[NSURL URLWithString:@"mqqapi://card/show_pslcard?src_type=internal&version=1&uin=678055716&card_type=group&source=qrcode"] fallback:nil];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
@@ -86,19 +86,19 @@
     if ([PSListController instancesRespondToSelector:_cmd]) {
         [super tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
     }
-    if ([cell isKindOfClass:[AxsLiquidGlasSliderCell class]]) {
-        AxsLiquidGlasSliderCell *sliderCell = (AxsLiquidGlasSliderCell *)cell;
+    if ([cell isKindOfClass:[AxsLiquidGlassSliderCell class]]) {
+        AxsLiquidGlassSliderCell *sliderCell = (AxsLiquidGlassSliderCell *)cell;
         sliderCell.handler = self;
-        [sliderCell axs_liquidglas_reloadState];
+        [sliderCell axs_liquidglass_reloadState];
     }
 }
 
-- (double)axs_liquidglas_sliderValueForSpecifier:(PSSpecifier *)specifier {
+- (double)axs_liquidglass_sliderValueForSpecifier:(PSSpecifier *)specifier {
     id value = [self readPreferenceValue:specifier];
     return [value isKindOfClass:[NSNumber class]] ? [value doubleValue] : 0.0;
 }
 
-- (void)axs_liquidglas_setSliderValue:(double)value specifier:(PSSpecifier *)specifier {
+- (void)axs_liquidglass_setSliderValue:(double)value specifier:(PSSpecifier *)specifier {
     double minimum = [[specifier propertyForKey:@"min"] doubleValue];
     double maximum = [[specifier propertyForKey:@"max"] doubleValue];
     if (!isfinite(minimum)) minimum = 0.0;

@@ -4,12 +4,12 @@
 <dict>
     <key>entry</key>
     <dict>
-        <key>bundle</key><string>AxsLiquidGlasPrefs</string>
+        <key>bundle</key><string>AxsLiquidGlassPrefs</string>
         <key>cell</key><string>PSLinkCell</string>
-        <key>detail</key><string>AxsLiquidGlasRootListController</string>
+        <key>detail</key><string>AxsLiquidGlassRootListController</string>
         <key>icon</key><string>icon</string>        
         <key>isController</key><true/>
-        <key>label</key><string>LiquidGlas</string>
+        <key>label</key><string>LiquidGlass</string>
     </dict>
 </dict>
 </plist>

@@ -2,9 +2,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AxsLiquidGlasGlassView : UIView
-- (instancetype)axs_liquidglas_initWithFrame:(CGRect)frame;
-- (void)axs_liquidglas_applyOpacity:(CGFloat)opacity
+@interface AxsLiquidGlassGlassView : UIView
+- (instancetype)axs_liquidglass_initWithFrame:(CGRect)frame;
+- (void)axs_liquidglass_applyOpacity:(CGFloat)opacity
                          tintColor:(UIColor *)tintColor
                       cornerRadius:(CGFloat)cornerRadius
                         glossLevel:(CGFloat)glossLevel
@@ -12,7 +12,7 @@
 @end
 
 // "#2563eb" -> UIColor. Parsing failure returns the fallback instead of black.
-static inline UIColor *axs_liquidglas_colorFromHexString(NSString *hex, UIColor *fallback) {
+static inline UIColor *axs_liquidglass_colorFromHexString(NSString *hex, UIColor *fallback) {
     if (![hex isKindOfClass:[NSString class]]) {
         return fallback;
     }

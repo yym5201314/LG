@@ -2,12 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleExecutable</key><string>AxsLiquidGlasPrefs</string>
-    <key>CFBundleIdentifier</key><string>com.axs.liquidglas.preferences</string>
-    <key>CFBundleName</key><string>LiquidGlas</string>
+    <key>CFBundleExecutable</key><string>AxsLiquidGlassPrefs</string>
+    <key>CFBundleIdentifier</key><string>com.axs.liquidglass.preferences</string>
+    <key>CFBundleName</key><string>LiquidGlass</string>
     <key>CFBundlePackageType</key><string>BNDL</string>
     <key>CFBundleShortVersionString</key><string>5.2.0</string>
     <key>CFBundleVersion</key><string>5.2.0</string>
-    <key>NSPrincipalClass</key><string>AxsLiquidGlasRootListController</string>
+    <key>NSPrincipalClass</key><string>AxsLiquidGlassRootListController</string>
 </dict>
 </plist>

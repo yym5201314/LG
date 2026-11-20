@@ -1,21 +1,21 @@
-#import "AxsLiquidGlasSliderCell.h"
+#import "AxsLiquidGlassSliderCell.h"
 #import <UIKit/UIKit.h>
 
-@interface AxsLiquidGlasSliderCell ()
+@interface AxsLiquidGlassSliderCell ()
 @property (nonatomic, strong) UISlider *slider;
 @property (nonatomic, strong) UILabel *valueLabel;
 @end
 
-@implementation AxsLiquidGlasSliderCell
+@implementation AxsLiquidGlassSliderCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)identifier
                     specifier:(PSSpecifier *)specifier {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier specifier:specifier];
     if (self) {
         _slider = [[UISlider alloc] initWithFrame:CGRectZero];
-        [_slider addTarget:self action:@selector(axs_liquidglas_sliderMoved:)
+        [_slider addTarget:self action:@selector(axs_liquidglass_sliderMoved:)
           forControlEvents:UIControlEventValueChanged];
-        [_slider addTarget:self action:@selector(axs_liquidglas_sliderCommitted:)
+        [_slider addTarget:self action:@selector(axs_liquidglass_sliderCommitted:)
           forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchCancel];
         [self.contentView addSubview:_slider];
         _valueLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -27,14 +27,14 @@
         [self.contentView addSubview:_valueLabel];
         self.textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        [self axs_liquidglas_reloadState];
+        [self axs_liquidglass_reloadState];
     }
     return self;
 }
 
 - (void)refreshCellContentsWithSpecifier:(PSSpecifier *)specifier {
     [super refreshCellContentsWithSpecifier:specifier];
-    [self axs_liquidglas_reloadState];
+    [self axs_liquidglass_reloadState];
 }
 
 - (void)prepareForReuse {
@@ -57,7 +57,7 @@
     self.valueLabel.frame = CGRectMake(valueX, 0, valueWidth, height);
 }
 
-- (void)axs_liquidglas_reloadState {
+- (void)axs_liquidglass_reloadState {
     self.textLabel.text = self.specifier.name ?: @"";
     self.slider.accessibilityLabel = self.textLabel.text;
     double minimum = [[self.specifier propertyForKey:@"min"] doubleValue];
@@ -67,30 +67,30 @@
     self.slider.minimumValue = minimum;
     self.slider.maximumValue = maximum;
     id initial = [self.specifier propertyForKey:@"default"];
-    double value = self.handler ? [self.handler axs_liquidglas_sliderValueForSpecifier:self.specifier]
+    double value = self.handler ? [self.handler axs_liquidglass_sliderValueForSpecifier:self.specifier]
                                : [initial doubleValue];
     if (!isfinite(value)) value = minimum;
     self.slider.value = fmax(minimum, fmin(maximum, value));
-    [self axs_liquidglas_updateLabel];
+    [self axs_liquidglass_updateLabel];
 }
 
-- (void)axs_liquidglas_updateLabel {
+- (void)axs_liquidglass_updateLabel {
     NSString *value = [NSString stringWithFormat:@"%.1f", self.slider.value];
     self.valueLabel.text = value;
     self.slider.accessibilityValue = value;
 }
 
-- (void)axs_liquidglas_sliderMoved:(UISlider *)sender {
-    [self axs_liquidglas_updateLabel];
+- (void)axs_liquidglass_sliderMoved:(UISlider *)sender {
+    [self axs_liquidglass_updateLabel];
     // VoiceOver adjustments do not necessarily emit touch-up events.
     if (UIAccessibilityIsVoiceOverRunning()) {
-        [self axs_liquidglas_sliderCommitted:sender];
+        [self axs_liquidglass_sliderCommitted:sender];
     }
 }
 
-- (void)axs_liquidglas_sliderCommitted:(UISlider *)sender {
-    [self axs_liquidglas_updateLabel];
-    [self.handler axs_liquidglas_setSliderValue:sender.value specifier:self.specifier];
+- (void)axs_liquidglass_sliderCommitted:(UISlider *)sender {
+    [self axs_liquidglass_updateLabel];
+    [self.handler axs_liquidglass_setSliderValue:sender.value specifier:self.specifier];
 }
 
 @end

@@ -8,7 +8,7 @@
 #import <rootless.h>
 #endif
 
-static inline NSString *axs_liquidglas_resourcePath(NSString *rootfsPath) {
+static inline NSString *axs_liquidglass_resourcePath(NSString *rootfsPath) {
 #ifdef THEOS_PACKAGE_SCHEME_ROOTHIDE
     return jbroot(rootfsPath);
 #else
@@ -16,8 +16,8 @@ static inline NSString *axs_liquidglas_resourcePath(NSString *rootfsPath) {
 #endif
 }
 
-static inline NSString *axs_liquidglas_preferencesPath(void) {
-    NSString *path = @"/var/mobile/Library/Preferences/com.axs.liquidglas.plist";
+static inline NSString *axs_liquidglass_preferencesPath(void) {
+    NSString *path = @"/var/mobile/Library/Preferences/com.axs.liquidglass.plist";
 #ifdef THEOS_PACKAGE_SCHEME_ROOTHIDE
     return jbroot(path);
 #else

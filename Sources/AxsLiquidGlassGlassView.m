@@ -1,15 +1,15 @@
-#import "AxsLiquidGlasGlassView.h"
+#import "AxsLiquidGlassGlassView.h"
 #include <math.h>
 
-@interface AxsLiquidGlasGlassView ()
+@interface AxsLiquidGlassGlassView ()
 @property (nonatomic, strong) UIVisualEffectView *blurView;
 @property (nonatomic, strong) UIView *tintView;
 @property (nonatomic, strong) CAGradientLayer *glossLayer;
 @end
 
-@implementation AxsLiquidGlasGlassView
+@implementation AxsLiquidGlassGlassView
 
-- (instancetype)axs_liquidglas_initWithFrame:(CGRect)frame {
+- (instancetype)axs_liquidglass_initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Decoration only: never swallow touches meant for Control Center.
@@ -46,7 +46,7 @@
     [CATransaction commit];
 }
 
-- (void)axs_liquidglas_applyOpacity:(CGFloat)opacity
+- (void)axs_liquidglass_applyOpacity:(CGFloat)opacity
                          tintColor:(UIColor *)tintColor
                       cornerRadius:(CGFloat)cornerRadius
                         glossLevel:(CGFloat)glossLevel
